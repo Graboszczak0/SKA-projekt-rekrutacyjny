@@ -4,6 +4,8 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QDebug>
+#include <QString>
+#include "mycommands.h"
 
 class MyServer : public QTcpServer
 {
@@ -16,7 +18,6 @@ signals:
 public slots:
     void newConnection();
     void readyRead();
-    void Send(QByteArray message);
 
 private:
     QTcpServer *server;

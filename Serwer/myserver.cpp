@@ -21,12 +21,15 @@ void MyServer::newConnection()
 void MyServer::readyRead()
 {
     socket->waitForReadyRead(1000);
-    QByteArray In = socket->readAll();
-    qDebug()<<In;
-    //Reakcja na wejście
-}
-
-void MyServer::Send(QByteArray message)
-{
-    socket->write(message);
+    QString In = socket->readAll();
+    while(In[In.size()-1]!='\n')
+    {
+        socket->waitForReadyRead(1000);
+        QString TIn=socket->readAll();
+        In=In+TIn;
+    }
+    if(In[0]=='M')
+    MyCommands::Motors(In);
+   // if(In[0]=='B')
+        //zapytanie o baterie
 }
