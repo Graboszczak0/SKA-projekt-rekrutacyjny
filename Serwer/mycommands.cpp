@@ -1,8 +1,51 @@
 #include "mycommands.h"
+#include "myserial.h"
+#include "myserver.h"
 
 MyCommands::MyCommands(QObject *parent) :
     QObject(parent)
 {
+}
+
+void MyCommands::CheckServer(QString S)
+{
+    if(S[0]=='M')
+    Motors(S);
+    if(S[0]=='B')
+    {
+        serial->send("b");
+        qDebug()<<"Zapytanie Bateria";
+    }
+    if(S[0]=='C')
+    {
+        qDebug()<<"Nastawianie Zegara";
+
+    }
+}
+
+void MyCommands::CheckSerial(char *S)
+{
+   QByteArray A;
+   if(S[0]=='v')
+   {
+       A+='V';
+       A+=';';
+       A+=QByteArray::number((int)S[1]);
+       A+=';';
+       A+=QByteArray::number((int)S[2]);
+       A+='\n';
+       serwer->send(A);
+       A.clear();
+   }
+   if(S[0]=='b')
+   {
+       A+='B';
+       A+=';';
+       A+=QByteArray::number((int)S[1]);
+       A+='\n';
+       serwer->send(A);
+       A.clear();
+   }
 }
 
 void MyCommands::Motors(QString S)
@@ -22,12 +65,37 @@ void MyCommands::Motors(QString S)
        }
     int Li = L.toInt();
     int Ri = R.toInt();
-    if(S[1]=='V')
+    QByteArray A;
+    if(S[1]=='V')   
+    {
         qDebug()<< "Sterowanie predkoscia. Silnik lewy:"<< Li <<"Silnik prawy:"<< Ri;
-       //wyslij do sterownikow {v}{L}{Li},{v}{R}{Ri}, wymagana zmiana z 16 bit na 8 bit.
+        A+=(char)Li;
+        serial->send("v");
+        serial->send("l");
+        serial->send(A);
+        A.clear();
+        A+=(char)Ri;
+        serial->send("v");
+        serial->send("r");
+        serial->send(A);
+        A.clear();
+
+    }
     if(S[1]=='P')
+    {
        qDebug()<< "Sterowanie PWM. Silnik lewy:"<< Li <<"Silnik prawy:"<< Ri;
-       //wyslij do sterownikow {p}{L}{Li},{p}{R}{Ri}, wymagana zmiana z 16 bit na 8 bit.
+       A+=(char)Li;
+       serial->send("p");
+       serial->send("l");
+       serial->send(A);
+       A.clear();
+       A+=(char)Ri;
+       serial->send("p");
+       serial->send("r");
+       serial->send(A);
+       A.clear();
+    }
 
 
 }
+

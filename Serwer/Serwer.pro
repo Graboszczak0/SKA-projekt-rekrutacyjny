@@ -6,6 +6,7 @@
 
 QT       += core
 QT       += network
+QT       += serialport
 
 QT       -= gui
 
@@ -18,8 +19,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     myserver.cpp \
-    mycommands.cpp
+    mycommands.cpp \
+    myserial.cpp
 
 HEADERS += \
     myserver.h \
-    mycommands.h
+    mycommands.h \
+    myserial.h

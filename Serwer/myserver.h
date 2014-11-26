@@ -12,6 +12,7 @@ class MyServer : public QTcpServer
     Q_OBJECT
 public:
     explicit MyServer(QObject *parent = 0);
+    void send(QByteArray S);
 
 signals:
 
@@ -22,6 +23,10 @@ public slots:
 private:
     QTcpServer *server;
     QTcpSocket *socket;
+
+
 };
+
+extern MyServer* serwer;
 
 #endif // MYSERVER_H

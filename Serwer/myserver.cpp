@@ -1,5 +1,7 @@
 #include "myserver.h"
 
+MyServer* serwer;
+
 MyServer::MyServer(QObject *parent) :
     QTcpServer(parent)
 {
@@ -28,8 +30,10 @@ void MyServer::readyRead()
         QString TIn=socket->readAll();
         In=In+TIn;
     }
-    if(In[0]=='M')
-    MyCommands::Motors(In);
-   // if(In[0]=='B')
-        //zapytanie o baterie
+    MyCommands::CheckServer(In);
+}
+
+void MyServer::send(QByteArray S)
+{
+    socket->write(S);
 }
