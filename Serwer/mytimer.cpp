@@ -17,6 +17,14 @@ void MyTimer::TimerStart(int a)
     timer->start(a);
 }
 
+void MyTimer::TimerStop()
+{
+   /*
+    *  Wyłączenie zegara.
+    */
+   timer->stop();
+}
+
 void MyTimer::MyTimerSlot()
 {
     /*
@@ -24,3 +32,5 @@ void MyTimer::MyTimerSlot()
      */
     serial->send("b");
 }
+
+

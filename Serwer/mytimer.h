@@ -10,6 +10,7 @@ class MyTimer : public QObject
 public:
     explicit MyTimer(QObject *parent = 0);
     void TimerStart(int);
+    void TimerStop();
     QTimer *timer;
 
 signals:

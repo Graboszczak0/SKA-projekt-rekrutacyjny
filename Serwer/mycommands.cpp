@@ -2,6 +2,7 @@
 #include "myserial.h"
 #include "myserver.h"
 #include "mytimer.h"
+
 MyCommands::MyCommands(QObject *parent) :
     QObject(parent)
 {
@@ -35,8 +36,16 @@ void MyCommands::CheckServer(QString S)
            i++;
            }
         T=I.toInt();
+        if(T==0)
+        {
+        timer->TimerStop();
+        qDebug()<<"Wylaczenie zegara.";
+        }
+        else
+        {
         timer->TimerStart(T);
         qDebug()<<"Nastawienie zegara na:" << T << "milisekund";
+        }
     }
 }
 
