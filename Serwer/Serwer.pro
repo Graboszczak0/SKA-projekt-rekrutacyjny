@@ -20,9 +20,11 @@ TEMPLATE = app
 SOURCES += main.cpp \
     myserver.cpp \
     mycommands.cpp \
-    myserial.cpp
+    myserial.cpp \
+    mytimer.cpp
 
 HEADERS += \
     myserver.h \
     mycommands.h \
-    myserial.h
+    myserial.h \
+    mytimer.h

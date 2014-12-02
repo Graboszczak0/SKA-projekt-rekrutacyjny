@@ -1,7 +1,7 @@
 #include "mycommands.h"
 #include "myserial.h"
 #include "myserver.h"
-
+#include "mytimer.h"
 MyCommands::MyCommands(QObject *parent) :
     QObject(parent)
 {
@@ -9,22 +9,42 @@ MyCommands::MyCommands(QObject *parent) :
 
 void MyCommands::CheckServer(QString S)
 {
+    /*
+     * Sprawdzanie rodzaju komunikatu (pierwsza litera polecenia)
+     */
     if(S[0]=='M')
     Motors(S);
     if(S[0]=='B')
     {
+        /*
+         *  Zapytanie o stan baterii;
+         */
         serial->send("b");
-        qDebug()<<"Zapytanie Bateria";
+        qDebug()<<"Zapytanie o starn baterii.";
     }
     if(S[0]=='C')
     {
-        qDebug()<<"Nastawianie Zegara";
-
+        /*
+         * Nastawianie zegara cyklicznych zapytań o baterię.
+         */
+        QString I;
+        int i=3, T;
+        while(S[i]!='\n')
+           {
+           I[i-3]=S[i];
+           i++;
+           }
+        T=I.toInt();
+        timer->TimerStart(T);
+        qDebug()<<"Nastawienie zegara na:" << T << "milisekund";
     }
 }
 
 void MyCommands::CheckSerial(char *S)
 {
+   /*
+    * Sprawdzenie rodzaju komunikatu (pierwszy bit), oraz sformułowanie odpowiedzi dla serwera.
+    */
    QByteArray A;
    if(S[0]=='v')
    {
@@ -50,6 +70,9 @@ void MyCommands::CheckSerial(char *S)
 
 void MyCommands::Motors(QString S)
 {
+    /*
+     * Interpretacja polecenia, sformułowanie polecenia dla sterownika silników.
+     */
     QString L, R;
     int i=0;
     while(S[i+3]!=';')

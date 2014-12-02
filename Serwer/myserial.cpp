@@ -9,6 +9,9 @@ MySerial::MySerial(QObject *parent) :
     QObject(parent)
 {
     serial = new QSerialPort(this);
+    /*
+     * Ustawienia Portu szeregowego.
+     */
     serial->setPortName("COM1");
     //serial->setBaudRate(QSerialPort::Baud9600);
     //serial->setDataBits(QSerialPort::Data8);
@@ -23,6 +26,9 @@ void MySerial::readyRead()
 {
     serial->waitForReadyRead(100);
     serial->getChar(&In[i]);
+    /*
+     * Zbieranie 3 bitów, następnie rozpoznanie komunikatu.
+     */
     i++;
     if(i==3)
     {
@@ -33,6 +39,8 @@ void MySerial::readyRead()
 
 void MySerial::send(QByteArray S)
 {
-    qDebug()<<(int)S[0];
+    /*
+     * Odpowiedź poprzez port szeregowy.
+     */
     serial->write(S);
 }

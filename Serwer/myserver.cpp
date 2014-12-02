@@ -8,11 +8,17 @@ MyServer::MyServer(QObject *parent) :
     server = new QTcpServer(this);
     socket = new QTcpSocket(this);
     connect(server,SIGNAL(newConnection()),this,SLOT(newConnection()));
+    /*
+     * Podstawowe ustawienia serwera.
+     */
     server->listen(QHostAddress::Any,1234);
 }
 
 void MyServer::newConnection()
 {
+    /*
+     * Połączenie serwera z klientem.
+     */
     socket = server->nextPendingConnection();
     socket->write("Connected\r\n");
     qDebug()<<"Connected";
@@ -24,6 +30,9 @@ void MyServer::readyRead()
 {
     socket->waitForReadyRead(1000);
     QString In = socket->readAll();
+    /*
+     * Kontrola kompletności komunikatu, następnie jego interpretacja.
+     */
     while(In[In.size()-1]!='\n')
     {
         socket->waitForReadyRead(1000);
@@ -35,5 +44,8 @@ void MyServer::readyRead()
 
 void MyServer::send(QByteArray S)
 {
+    /*
+     * Odpowiedź serwera.
+     */
     socket->write(S);
 }
