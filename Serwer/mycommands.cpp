@@ -21,7 +21,7 @@ void MyCommands::CheckServer(QString S)
          *  Zapytanie o stan baterii;
          */
         serial->send("b");
-        qDebug()<<"Zapytanie o starn baterii.";
+        qDebug()<<"Zapytanie o stan baterii.";
     }
     if(S[0]=='C')
     {
@@ -116,14 +116,17 @@ void MyCommands::Motors(QString S)
     if(S[1]=='P')
     {
        qDebug()<< "Sterowanie PWM. Silnik lewy:"<< Li <<"Silnik prawy:"<< Ri;
+       A.clear();
+       A+="pl";
        A+=(char)Li;
-       serial->send("p");
-       serial->send("l");
+       //serial->send("p");
+       //serial->send("l");
        serial->send(A);
        A.clear();
-       A+=(char)Ri;
-       serial->send("p");
-       serial->send("r");
+       A+="pr";
+       A+=(char)0;
+       //serial->send("p");
+       //serial->send("r");
        serial->send(A);
        A.clear();
     }
