@@ -19,6 +19,7 @@ signals:
 public slots:
     void newConnection();
     void readyRead();
+    void checkConnection();
 
 private:
     QTcpServer *server;

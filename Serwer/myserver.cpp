@@ -25,11 +25,12 @@ void MyServer::newConnection()
     qDebug()<<"Connected";
     socket->flush();
     connect(socket,SIGNAL(readyRead()),this,SLOT(readyRead()));
+    connect(socket,SIGNAL(disconnected()),this,SLOT(checkConnection()));
 }
 
 void MyServer::readyRead()
 {
-   // qDebug()<<"\n\n\nreading network socket\n\n\n";
+   // socket->waitForReadyRead(1000);
     QString In = socket->readAll();
     QString Com;
     /*
@@ -37,19 +38,33 @@ void MyServer::readyRead()
      */
     while(In[In.size()-1]!='\n')
     {
-        socket->waitForReadyRead(0);
+        //socket->waitForReadyRead(1000);
         QString TIn=socket->readAll();
         In=In+TIn;
     }
-    for(int i=0, j=0; i<In.size(); i++, j++)
+    for(int i=0, j=0; i<In.size(); i++)
     {
         Com[j]=In[i];
         if(Com[j]=='\n')
         {
-        MyCommands::CheckServer(Com);
-        Com.clear();
-        j=-1;
+            MyCommands::CheckServer(Com);
+            Com.clear();
+            j=0;
         }
+        else
+            j++;
+    }
+}
+
+void MyServer::checkConnection()
+{
+    /*
+     * Sprawdzanie stanu połączenia.
+     */
+    if(socket->state()==QAbstractSocket::UnconnectedState)
+    {
+        qDebug()<<"Notconnected";
+        MyCommands::CheckServer("MP;0;0\n");
     }
 }
 

@@ -22,15 +22,11 @@ MySerial::MySerial(QObject *parent) :
 }
 void MySerial::readyRead()
 {
-    //serial->waitForReadyRead(0);
+    //serial->waitForReadyRead(1000);
     In=serial->readAll();
-
- //  qDebug()<<"Receiving this frame in hex"<<In.toHex();
-// qDebug()<<"Receiving this frame in string"<<In;
     /*
      * Zbieranie 3 bitów, następnie rozpoznanie komunikatu.
      */
-    //qDebug()<<In;
     MyCommands::CheckSerial((char*)In.constData());
 }
 
@@ -39,7 +35,6 @@ void MySerial::send(QByteArray S)
     /*
      * Odpowiedź poprzez port szeregowy.
      */
-    //qDebug()<<"Sending this frame"<<S.toHex();
     serial->write(S);
     serial->flush();
 }

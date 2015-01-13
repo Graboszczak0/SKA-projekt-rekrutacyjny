@@ -101,14 +101,16 @@ void MyCommands::Motors(QString S)
     if(S[1]=='V')   
     {
         qDebug()<< "Sterowanie predkoscia. Silnik lewy:"<< Li <<"Silnik prawy:"<< Ri;
+        A+="vl";
         A+=(char)Li;
-        serial->send("v");
-        serial->send("l");
+        //serial->send("v");
+        //serial->send("l");
         serial->send(A);
         A.clear();
+        A+="vr";
         A+=(char)Ri;
-        serial->send("v");
-        serial->send("r");
+        //serial->send("v");
+       // serial->send("r");
         serial->send(A);
         A.clear();
 
@@ -124,7 +126,7 @@ void MyCommands::Motors(QString S)
        serial->send(A);
        A.clear();
        A+="pr";
-       A+=(char)0;
+       A+=(char)Ri;
        //serial->send("p");
        //serial->send("r");
        serial->send(A);
