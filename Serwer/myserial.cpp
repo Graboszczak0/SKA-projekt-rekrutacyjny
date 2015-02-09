@@ -11,8 +11,8 @@ MySerial::MySerial(QObject *parent) :
     /*
      * Ustawienia Portu szeregowego.
      */
-    serial->setPortName("COM4");
-    serial->setBaudRate(QSerialPort::Baud9600);
+    serial->setPortName("COM3");
+    serial->setBaudRate(QSerialPort::Baud115200);
     serial->setDataBits(QSerialPort::Data8);
     serial->setParity(QSerialPort::NoParity);
     serial->setStopBits(QSerialPort::OneStop);
@@ -22,12 +22,17 @@ MySerial::MySerial(QObject *parent) :
 }
 void MySerial::readyRead()
 {
-    //serial->waitForReadyRead(1000);
-    In=serial->readAll();
+    QByteArray T=serial->read(3-In.size());
+    In+=T;
+    //serial->waitForReadyRead(1000);In=serial->readAll();
     /*
      * Zbieranie 3 bitów, następnie rozpoznanie komunikatu.
      */
-    MyCommands::CheckSerial((char*)In.constData());
+    if(In.size()==3)
+    {
+    MyCommands::CheckSerial(In);
+    In.clear();
+    }
 }
 
 void MySerial::send(QByteArray S)

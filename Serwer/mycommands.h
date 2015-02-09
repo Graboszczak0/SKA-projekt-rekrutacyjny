@@ -13,7 +13,7 @@ public:
     explicit MyCommands(QObject *parent = 0);
     static void Motors(QString S);
     static void CheckServer(QString S);
-    static void CheckSerial(char *S);
+    static void CheckSerial(QByteArray S);
 
 signals:
 

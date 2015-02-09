@@ -31,25 +31,25 @@ void MyCommands::CheckServer(QString S)
         QString I;
         int i=3, T;
         while(S[i]!='\n')
-           {
-           I[i-3]=S[i];
-           i++;
-           }
+        {
+            I[i-3]=S[i];
+            i++;
+        }
         T=I.toInt();
         if(T==0)
         {
-        timer->TimerStop();
-        qDebug()<<"Wylaczenie zegara.";
+            timer->TimerStop();
+            qDebug()<<"Wylaczenie zegara.";
         }
         else
         {
-        timer->TimerStart(T);
-        qDebug()<<"Nastawienie zegara na:" << T << "milisekund";
+            timer->TimerStart(T);
+            qDebug()<<"Nastawienie zegara na:" << T << "milisekund";
         }
     }
 }
 
-void MyCommands::CheckSerial(char *S)
+void MyCommands::CheckSerial(QByteArray S)
 {
    /*
     * Sprawdzenie rodzaju komunikatu (pierwszy bit), oraz sformułowanie odpowiedzi dla serwera.
@@ -64,6 +64,7 @@ void MyCommands::CheckSerial(char *S)
        A+=QByteArray::number((int)S[2]);
        A+='\n';
        serwer->send(A);
+       qDebug()<<A;
        A.clear();
    }
    if(S[0]=='b')
@@ -85,16 +86,16 @@ void MyCommands::Motors(QString S)
     QString L, R;
     int i=0;
     while(S[i+3]!=';')
-       {
+    {
        L[i]=S[i+3];
        i++;
-       }
+    }
     i=0;
     while(S[i+L.size()+4]!='\n')
-       {
+    {
        R[i]=S[i+L.size()+4];
        i++;
-       }
+    }
     int Li = L.toInt();
     int Ri = R.toInt();
     QByteArray A;
@@ -103,14 +104,14 @@ void MyCommands::Motors(QString S)
         qDebug()<< "Sterowanie predkoscia. Silnik lewy:"<< Li <<"Silnik prawy:"<< Ri;
         A+="vl";
         A+=(char)Li;
-        //serial->send("v");
-        //serial->send("l");
+      //serial->send("v");
+      //serial->send("l");
         serial->send(A);
         A.clear();
         A+="vr";
         A+=(char)Ri;
-        //serial->send("v");
-       // serial->send("r");
+      //serial->send("v");
+      //serial->send("r");
         serial->send(A);
         A.clear();
 
@@ -132,7 +133,5 @@ void MyCommands::Motors(QString S)
        serial->send(A);
        A.clear();
     }
-
-
 }
 
